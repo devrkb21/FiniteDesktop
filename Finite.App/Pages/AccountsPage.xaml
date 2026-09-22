@@ -1,0 +1,80 @@
+<Page x:Class="Finite.App.Pages.AccountsPage"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+         xmlns:vm="clr-namespace:Finite.App.ViewModels"
+         xmlns:controls="clr-namespace:Finite.App.Controls"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         mc:Ignorable="d"
+         Loaded="OnLoaded">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Accounts" FontSize="28" FontWeight="SemiBold" />
+
+        <ui:Card Grid.Row="1" Margin="0,12,0,12" Padding="16">
+            <StackPanel>
+                <WrapPanel>
+                    <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Account name" Width="200" Margin="0,0,8,8" />
+                    <ComboBox ItemsSource="{Binding AccountTypes}"
+                              SelectedItem="{Binding SelectedType}" Width="130" Margin="0,0,8,8" />
+                    <ui:TextBox Text="{Binding InitialBalance, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Initial balance ৳" Width="130" Margin="0,0,8,8" />
+                    <ui:TextBox Text="{Binding WalletProvider, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Bkash/Nagad/Rocket…" Width="140" Margin="0,0,8,8"
+                                Visibility="{Binding ShowWalletField, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <ui:TextBox Text="{Binding BankName, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Bank name" Width="140" Margin="0,0,8,8"
+                                Visibility="{Binding ShowBankField, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <ui:TextBox Text="{Binding AccountNumber, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Number (last 4)" Width="120" Margin="0,0,8,8"
+                                Visibility="{Binding ShowBankField, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <ui:TextBox Text="{Binding CreditLimit, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Credit limit ৳" Width="120" Margin="0,0,8,8"
+                                Visibility="{Binding ShowCreditLimit, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </WrapPanel>
+                <WrapPanel>
+                    <controls:ColorPickerButton HexText="{Binding Color, UpdateSourceTrigger=PropertyChanged}"
+                                                Margin="0,0,8,8" VerticalAlignment="Top" />
+                    <ui:Button Content="Add Account" Appearance="Primary"
+                               Command="{Binding AddCommand}" Margin="0,0,12,8" />
+                    <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </WrapPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <ui:ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectionMode="Single">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="90" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Width="12" Height="12" RadiusX="3" RadiusY="3" VerticalAlignment="Center"
+                                   Fill="{Binding Account.Color, Converter={StaticResource HexToBrush}}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Text="{Binding TypeLabel}" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBlock Grid.Column="2" Text="{Binding BalanceText}" HorizontalAlignment="Right"
+                                   FontWeight="Bold" VerticalAlignment="Center" />
+                        <ui:Button Grid.Column="3" Content="Delete" Appearance="Danger" Margin="8,0,0,0"
+                                   Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                   CommandParameter="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+    </Grid>
+</Page>

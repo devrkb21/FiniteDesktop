@@ -1,0 +1,91 @@
+<Page x:Class="Finite.App.Pages.RecurringPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Loaded="OnLoaded">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Recurring Transactions" FontSize="28" FontWeight="SemiBold" />
+
+        <ui:Card Grid.Row="1" Margin="0,12,0,12" Padding="16">
+            <StackPanel>
+                <WrapPanel>
+                    <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="e.g. Rent, Salary, Netflix" Width="170" Margin="0,0,8,8" />
+                    <ComboBox ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedType}"
+                              Width="110" Margin="0,0,8,8" />
+                    <ui:TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Amount ৳" Width="110" Margin="0,0,8,8" />
+                    <ComboBox ItemsSource="{Binding AccountOptions}" SelectedItem="{Binding SelectedAccount}"
+                              DisplayMemberPath="Name" Width="160" Margin="0,0,8,8" />
+                    <ComboBox ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}"
+                              DisplayMemberPath="Name" Width="150" Margin="0,0,8,8" />
+                    <ComboBox ItemsSource="{Binding Frequencies}" SelectedItem="{Binding SelectedFrequency}"
+                              Width="110" Margin="0,0,8,8" />
+                    <ui:TextBox Text="{Binding DayOfMonth, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Day (1-31)" Width="90" Margin="0,0,8,8" />
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Start:" VerticalAlignment="Center" Margin="0,0,6,8" />
+                    <DatePicker SelectedDate="{Binding StartDate}" Width="140" Margin="0,0,12,8" />
+                    <TextBlock Text="End (optional):" VerticalAlignment="Center" Margin="0,0,6,8" />
+                    <DatePicker SelectedDate="{Binding EndDate}" Width="140" Margin="0,0,12,8" />
+                    <ui:Button Content="Add Recurring" Appearance="Primary" Command="{Binding AddCommand}" Margin="0,0,12,8" />
+                    <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </WrapPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <ui:ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectionMode="Single">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="{Binding TypeBrush}" CornerRadius="4" Padding="6,1">
+                                    <TextBlock Text="{Binding TypeLabel}" FontSize="10" FontWeight="SemiBold"
+                                               Foreground="#0E1726" />
+                                </Border>
+                                <TextBlock Text="{Binding Name}" Margin="8,0,0,0" FontWeight="SemiBold" />
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="{Binding AmountText}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" />
+                        <TextBlock Grid.Column="2" Text="{Binding FrequencyLabel}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                        <TextBlock Grid.Column="3" Text="{Binding AccountName}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" FontSize="12" />
+                        <TextBlock Grid.Column="4" Text="{Binding CategoryName}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" FontSize="12" Opacity="0.8" />
+                        <TextBlock Grid.Column="5" Text="{Binding NextDueText}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{Binding IsOverdue, Converter={StaticResource BoolToRedConverter}}" FontSize="12" />
+                        <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ui:Button Content="Create Now" Appearance="Success" Margin="0,0,6,0"
+                                       Command="{Binding DataContext.CreateNowCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                       CommandParameter="{Binding}" />
+                            <ui:Button Content="✕" Appearance="Danger"
+                                       Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                       CommandParameter="{Binding}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+    </Grid>
+</Page>

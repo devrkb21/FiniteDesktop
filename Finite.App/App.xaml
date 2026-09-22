@@ -1,0 +1,23 @@
+<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             x:Class="Finite.App.App"
+             StartupUri="Views/MainWindow.xaml"
+             DispatcherUnhandledException="OnDispatcherUnhandledException">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Required: ApplicationThemeManager.Apply *replaces* this dictionary.
+                     Without it, theme switching silently does nothing. -->
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+            <app:InverseBoolConverter x:Key="InverseBoolConverter" xmlns:app="clr-namespace:Finite.App" />
+            <app:BoolToRedConverter x:Key="BoolToRedConverter" xmlns:app="clr-namespace:Finite.App" />
+            <app:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" xmlns:app="clr-namespace:Finite.App" />
+            <app:BoolToTodayBrushConverter x:Key="BoolToTodayBrushConverter" xmlns:app="clr-namespace:Finite.App" />
+            <app:InMonthOpacityConverter x:Key="InMonthOpacityConverter" xmlns:app="clr-namespace:Finite.App" />
+            <app:HexToBrushConverter x:Key="HexToBrush" xmlns:app="clr-namespace:Finite.App" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

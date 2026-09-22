@@ -1,0 +1,58 @@
+<Page x:Class="Finite.App.Pages.CategoriesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:controls="clr-namespace:Finite.App.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Loaded="OnLoaded">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Categories" FontSize="28" FontWeight="SemiBold" />
+
+        <ui:Card Grid.Row="1" Margin="0,12,0,12" Padding="16">
+            <WrapPanel>
+                <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Category name" Width="200" Margin="0,0,8,8" />
+                <ComboBox ItemsSource="{Binding CategoryTypes}" SelectedItem="{Binding SelectedType}"
+                          Width="120" Margin="0,0,8,8" />
+                <controls:ColorPickerButton HexText="{Binding Color, UpdateSourceTrigger=PropertyChanged}"
+                                            Margin="0,0,8,8" VerticalAlignment="Top" />
+                <ui:Button Content="Add Category" Appearance="Primary" Command="{Binding AddCommand}" Margin="0,0,12,8" />
+                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </WrapPanel>
+        </ui:Card>
+
+        <ui:ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectionMode="Single">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="90" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="{Binding Color, Converter={StaticResource HexToBrush}}" RadiusX="3" RadiusY="3" Width="12" Height="12"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Text="{Binding Type}" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ui:Button Grid.Column="3" Content="Delete" Appearance="Danger"
+                                   IsEnabled="{Binding IsSystem, Converter={StaticResource InverseBoolConverter}}"
+                                   Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                   CommandParameter="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+    </Grid>
+</Page>

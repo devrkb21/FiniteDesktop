@@ -1,0 +1,71 @@
+<Page x:Class="Finite.App.Pages.SavingsGoalsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:controls="clr-namespace:Finite.App.Controls"
+      mc:Ignorable="d"
+      Loaded="OnLoaded">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Savings Goals" FontSize="28" FontWeight="SemiBold" />
+
+        <ui:Card Grid.Row="1" Margin="0,12,0,12" Padding="16">
+            <WrapPanel>
+                <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Goal name" Width="180" Margin="0,0,8,8" />
+                <ui:TextBox Text="{Binding TargetAmount, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Target ৳" Width="120" Margin="0,0,8,8" />
+                <ComboBox ItemsSource="{Binding AccountOptions}" SelectedItem="{Binding SelectedAccount}"
+                          DisplayMemberPath="Name" Width="180" Margin="0,0,8,8" />
+                <DatePicker SelectedDate="{Binding TargetDate}" Width="140" Margin="0,0,8,8" />
+                <ui:Button Content="Add Goal" Appearance="Primary" Command="{Binding AddCommand}" Margin="0,0,12,8" />
+                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </WrapPanel>
+        </ui:Card>
+
+        <ui:ListView Grid.Row="2" ItemsSource="{Binding Items}" SelectionMode="Single">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="130" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="90" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding AccountName, StringFormat=' · {0}'}"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text=" ✓ ACHIEVED" FontWeight="Bold" FontSize="11" Foreground="#4ADE80"
+                                           Visibility="{Binding Completed, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+                            <controls:ColoredProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}"
+                                                Margin="0,6,0,0" Foreground="{Binding Color}" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="{Binding CurrentText}" HorizontalAlignment="Right"
+                                   VerticalAlignment="Center" FontWeight="Bold" />
+                        <TextBlock Grid.Column="2" Text="{Binding TargetText}" HorizontalAlignment="Right"
+                                   VerticalAlignment="Center" Opacity="0.7" />
+                        <TextBlock Grid.Column="3" Text="{Binding ProgressText}" HorizontalAlignment="Right"
+                                   VerticalAlignment="Center" FontWeight="Bold" Foreground="{Binding Color}" />
+                        <ui:Button Grid.Column="4" Content="Delete" Appearance="Danger"
+                                   Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                   CommandParameter="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+    </Grid>
+</Page>

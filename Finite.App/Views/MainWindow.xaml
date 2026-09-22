@@ -1,0 +1,46 @@
+<ui:FluentWindow x:Class="Finite.App.Views.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:pages="clr-namespace:Finite.App.Pages"
+                 Title="Finite — Personal Finance"
+                 Width="1200" Height="800"
+                 WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True"
+                 Background="{DynamicResource ApplicationBackgroundBrush}">
+
+    <Grid>
+        <ui:NavigationView x:Name="RootNavigation"
+                           PaneDisplayMode="Left"
+                           IsBackButtonVisible="Collapsed">
+            <ui:NavigationView.Header>
+                <ui:TitleBar Title="Finite" />
+            </ui:NavigationView.Header>
+
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Dashboard" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:DashboardPage}" />
+                <ui:NavigationViewItem Content="Transactions" Icon="{ui:SymbolIcon ArrowSwap24}" TargetPageType="{x:Type pages:TransactionsPage}" />
+                <ui:NavigationViewItem Content="Accounts" Icon="{ui:SymbolIcon Wallet24}" TargetPageType="{x:Type pages:AccountsPage}" />
+                <ui:NavigationViewItem Content="Transfers" Icon="{ui:SymbolIcon ArrowRepeatAll24}" TargetPageType="{x:Type pages:TransfersPage}" />
+
+                <ui:NavigationViewItem Content="Budgets" Icon="{ui:SymbolIcon DataUsage24}" TargetPageType="{x:Type pages:BudgetsPage}" />
+                <ui:NavigationViewItem Content="Debts &amp; Loans" Icon="{ui:SymbolIcon People24}" TargetPageType="{x:Type pages:DebtsPage}" />
+                <ui:NavigationViewItem Content="Savings Goals" Icon="{ui:SymbolIcon Target24}" TargetPageType="{x:Type pages:SavingsGoalsPage}" />
+                <ui:NavigationViewItem Content="Recurring" Icon="{ui:SymbolIcon ArrowClockwise24}" TargetPageType="{x:Type pages:RecurringPage}" />
+                <ui:NavigationViewItem Content="Categories" Icon="{ui:SymbolIcon Tag24}" TargetPageType="{x:Type pages:CategoriesPage}" />
+
+                <ui:NavigationViewItem Content="Analytics" Icon="{ui:SymbolIcon ChartMultiple24}" TargetPageType="{x:Type pages:AnalyticsPage}" />
+                <ui:NavigationViewItem Content="Bill Calendar" Icon="{ui:SymbolIcon CalendarLtr24}" TargetPageType="{x:Type pages:BillCalendarPage}" />
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Content="Settings" Icon="{ui:SymbolIcon Settings24}"
+                                       TargetPageType="{x:Type pages:SettingsPage}" />
+            </ui:NavigationView.FooterMenuItems>
+
+            <ui:NavigationView.ContentOverlay>
+                <Grid />
+            </ui:NavigationView.ContentOverlay>
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>

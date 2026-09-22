@@ -1,0 +1,131 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Finite.App.Controls">
+
+    <!-- ===================== ColoredProgressBar ===================== -->
+    <Style TargetType="{x:Type controls:ColoredProgressBar}">
+        <Setter Property="Height" Value="6" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ColoredProgressBar}">
+                    <Grid>
+                        <Border x:Name="PART_Track" Background="#22808080"
+                                CornerRadius="{TemplateBinding CornerRadius}" />
+                        <Rectangle x:Name="PART_Fill" Fill="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Left"
+                                   RadiusX="3" RadiusY="3" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== ColorPickerButton ===================== -->
+    <Style TargetType="{x:Type controls:ColorPickerButton}">
+        <Setter Property="Height" Value="34" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ColorPickerButton}">
+                    <Grid>
+                        <!-- Closed state: swatch + hex label, styled like a WPF-UI field -->
+                        <Border x:Name="PART_Swatch" CornerRadius="4" BorderThickness="1"
+                                BorderBrush="#55808080" Background="#22808080" Cursor="Hand"
+                                ToolTip="Pick a color">
+                            <StackPanel Orientation="Horizontal" Margin="8,5">
+                                <Rectangle x:Name="PART_SwatchFill" Width="14" Height="14"
+                                           RadiusX="3" RadiusY="3"
+                                           Stroke="#55808080" StrokeThickness="1" />
+                                <TextBlock x:Name="PART_HexText" Margin="8,0,4,0"
+                                           VerticalAlignment="Center" FontSize="12"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </StackPanel>
+                        </Border>
+                        <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=PART_Swatch}"
+                               Placement="Bottom" StaysOpen="False" AllowsTransparency="True">
+                            <Border Background="{DynamicResource ApplicationBackgroundBrush}"
+                                    BorderBrush="#55808080" BorderThickness="1" CornerRadius="8"
+                                    Padding="12" Margin="8" Width="252"
+                                    SnapsToDevicePixels="True">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="14" ShadowDepth="2" Opacity="0.45" />
+                                </Border.Effect>
+                                <StackPanel>
+                                    <!-- Saturation (white→) and value (→black) square -->
+                                    <Border x:Name="PART_SvBox" Height="130" CornerRadius="6"
+                                            BorderBrush="#44808080" BorderThickness="1"
+                                            ClipToBounds="True" Cursor="Cross"
+                                            Background="#FF0080FF">
+                                        <Grid ClipToBounds="True">
+                                            <!-- white → transparent (saturation) -->
+                                            <Rectangle>
+                                                <Rectangle.Fill>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Color="#FFFFFFFF" Offset="0" />
+                                                        <GradientStop Color="#00FFFFFF" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <Canvas x:Name="PART_SvCanvas">
+                                                <Ellipse x:Name="PART_SvCursor" Width="12" Height="12"
+                                                         Stroke="#FFFFFFFF" StrokeThickness="2"
+                                                         Fill="Transparent" IsHitTestVisible="False" />
+                                            </Canvas>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Hue bar -->
+                                    <Border x:Name="PART_HueTrack" Height="14" Margin="0,10,0,0"
+                                            CornerRadius="7" BorderBrush="#44808080" BorderThickness="1"
+                                            Cursor="Hand">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#FFFF0000" Offset="0" />
+                                                <GradientStop Color="#FFFF00FF" Offset="0.17" />
+                                                <GradientStop Color="#FF0000FF" Offset="0.33" />
+                                                <GradientStop Color="#FF00FFFF" Offset="0.5" />
+                                                <GradientStop Color="#FF00FF00" Offset="0.67" />
+                                                <GradientStop Color="#FFFFFF00" Offset="0.83" />
+                                                <GradientStop Color="#FFFF0000" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Canvas>
+                                            <Rectangle x:Name="PART_HueCursor" Width="6" Height="16"
+                                                       RadiusX="3" RadiusY="3" Fill="White"
+                                                       Stroke="#CC000000" StrokeThickness="1"
+                                                       IsHitTestVisible="False" />
+                                        </Canvas>
+                                    </Border>
+
+                                    <!-- Preset swatches (populated from code) -->
+                                    <ItemsControl x:Name="PART_Presets" Margin="0,10,0,0" IsTabStop="False">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="5" Rows="2" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <!-- Hex entry + live preview -->
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="PART_HexInput" Height="28" FontSize="12"
+                                                 VerticalContentAlignment="Center" MaxLength="9" />
+                                        <Border x:Name="PART_Preview" Grid.Column="1" Width="28" Height="28"
+                                                Margin="6,0,0,0" CornerRadius="4"
+                                                BorderBrush="#44808080" BorderThickness="1" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

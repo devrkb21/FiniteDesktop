@@ -1,0 +1,6 @@
+bin/
+obj/
+publish/
+installer/*.zip
+installer/*.exe
+*.user

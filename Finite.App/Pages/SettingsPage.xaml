@@ -1,0 +1,105 @@
+<Page x:Class="Finite.App.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:Finite.App.ViewModels"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance vm:SettingsViewModel}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24" MaxWidth="760" HorizontalAlignment="Left">
+
+            <TextBlock Text="Settings" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,16" />
+
+            <!-- ============ Appearance ============ -->
+            <TextBlock Text="Appearance" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <ui:Card Padding="16" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Theme" FontWeight="SemiBold" />
+                        <TextBlock Text="Dark, light, or follow the Windows setting. Applies instantly."
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                    </StackPanel>
+                    <ComboBox Grid.Column="1" MinWidth="160" VerticalAlignment="Center"
+                              ItemsSource="{Binding ThemeOptions}"
+                              SelectedItem="{Binding SelectedTheme}" />
+                </Grid>
+            </ui:Card>
+
+            <!-- ============ Data ============ -->
+            <TextBlock Text="Data" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <ui:Card Padding="16" Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Database location" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding DatabasePath}" FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   TextTrimming="CharacterEllipsis" ToolTip="{Binding DatabasePath}" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Content="Open folder" VerticalAlignment="Center"
+                               Command="{Binding OpenDatabaseFolderCommand}" />
+                </Grid>
+            </ui:Card>
+            <ui:Card Padding="16" Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Backup" FontWeight="SemiBold" />
+                        <TextBlock Text="Save a copy of all your financial data to a file."
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Content="Backup…" VerticalAlignment="Center"
+                               Command="{Binding BackupDatabaseCommand}" />
+                </Grid>
+            </ui:Card>
+            <ui:Card Padding="16" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Restore" FontWeight="SemiBold" />
+                        <TextBlock Text="Replace the current database with a backup file."
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Content="Restore…" Appearance="Caution" VerticalAlignment="Center"
+                               Command="{Binding RestoreDatabaseCommand}" />
+                </Grid>
+            </ui:Card>
+
+            <!-- ============ About ============ -->
+            <TextBlock Text="About" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <ui:Card Padding="16" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold">
+                        <Run Text="Finite Desktop" />
+                        <Run Text="{Binding AppVersion, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </TextBlock>
+                    <TextBlock Text="Local-first personal finance tracker — accounts, transactions, budgets, debts, goals, recurring transactions and reports. All data stays on this computer."
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12"
+                               TextWrapping="Wrap" Margin="0,4,0,0" />
+                </StackPanel>
+            </ui:Card>
+
+            <TextBlock Text="{Binding StatusText}" Margin="0,12,0,0"
+                       Foreground="{DynamicResource SystemFillColorSuccessBrush}" TextWrapping="Wrap" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>

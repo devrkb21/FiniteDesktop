@@ -1,0 +1,86 @@
+<Page x:Class="Finite.App.Pages.DebtsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:app="clr-namespace:Finite.App"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Loaded="OnLoaded">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <TextBlock Text="Debts &amp; Loans" FontSize="28" FontWeight="SemiBold" />
+            <TextBlock Text="{Binding TotalsText}" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Grid>
+
+        <ui:Card Grid.Row="1" Margin="0,12,0,12" Padding="16">
+            <WrapPanel>
+                <ComboBox ItemsSource="{Binding DebtTypes}" SelectedItem="{Binding SelectedType}" Width="130" Margin="0,0,8,8" />
+                <ui:TextBox Text="{Binding PersonName, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Person / company" Width="170" Margin="0,0,8,8" />
+                <ui:TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Amount ৳" Width="120" Margin="0,0,8,8" />
+                <ComboBox ItemsSource="{Binding AccountOptions}" SelectedItem="{Binding SelectedAccount}"
+                          DisplayMemberPath="Name" Width="160" Margin="0,0,8,8" />
+                <DatePicker SelectedDate="{Binding DueDate}" Width="140" Margin="0,0,8,8" />
+                <ui:TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="Note (optional)" Width="160" Margin="0,0,8,8" />
+                <ui:Button Content="Record Debt" Appearance="Primary" Command="{Binding AddCommand}" Margin="0,0,12,8" />
+                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </WrapPanel>
+        </ui:Card>
+
+        <TextBlock Grid.Row="2" Text="{Binding StatusText}" Foreground="#F59E0B" Margin="0,0,0,6" />
+
+        <ui:ListView Grid.Row="3" ItemsSource="{Binding Items}" SelectionMode="Single">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="130" />
+                        </Grid.ColumnDefinitions>
+                        <Border Background="{Binding TypeBrush}" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left">
+                            <TextBlock Text="{Binding TypeLabel}" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="#0E1726" />
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding PersonName}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Description}" FontSize="11" TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="{Binding AmountText}" VerticalAlignment="Center" HorizontalAlignment="Right" Opacity="0.7" />
+                        <TextBlock Grid.Column="3" Text="{Binding RemainingText}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" />
+                        <TextBlock Grid.Column="4" Text="{Binding DueText}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   Foreground="{Binding IsOverdue, Converter={StaticResource BoolToRedConverter}}" />
+                        <TextBlock Grid.Column="5" Text="{Binding StatusText}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                        <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ui:Button Content="Settle" Appearance="Success" Margin="0,0,6,0"
+                                       Command="{Binding DataContext.RecordPaymentCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                       CommandParameter="{Binding}" />
+                            <ui:Button Content="✕" Appearance="Danger"
+                                       Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ui:ListView}}"
+                                       CommandParameter="{Binding}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+    </Grid>
+</Page>
